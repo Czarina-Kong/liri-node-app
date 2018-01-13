@@ -21,3 +21,35 @@ var defaultMovie = "Mr. Nobody"
 var client = new Twitter(keys.twitter)
 var spotifyApi = new SpotifyWebApi(keys.spotify)
 
+// Let's make some functions
+
+//function to run commands
+function runCommands(command, userInput){
+	console.log('runCommands function is working')
+	console.log(userInput)
+	switch(command){
+		case 'my-tweets':
+			getTweets()
+			break
+		case 'spotify-this-song':
+			//If user has not specified a song , use default
+			if(userInput === undefined){
+				userInput = defaultSong
+			}     
+			searchSong(userInput)
+			break
+		case 'movie-this':
+			//If user has not specified a movie Name , use default
+			if(userInput === undefined){
+				userInput = defaultMovie
+			}    
+			searchMovie(userInput)
+			break
+		case 'do-what-it-says':
+			doWhatItSays()
+			break
+		default: 
+			console.log("Please type any of the following commands: my-tweets spotify-this-song movie-this do-what-it-says.")
+	}
+}
+runCommands()

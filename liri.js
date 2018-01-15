@@ -8,6 +8,8 @@ var fs = require('fs')
 var request = require('request')
 var Twitter = require('twitter')
 // var spotify = require('spotify')
+// var SpotifyWebApi = require('spotify-web-api-node')
+var Spotify = require('node-spotify-api')
 var keys = require("./keys.js")
 // variables to store commands and user inputs
 var command = process.argv[2]
@@ -18,23 +20,23 @@ var defaultMovie = "Mr. Nobody"
 // variables to access keys
 var client = new Twitter(keys.twitter)
 // var spotify = new spotify(keys.spotify)
+// var spotifyApi = new SpotifyWebApi(keys.spotify)
+var spotify = new Spotify(keys.spotify)
 
 
 
 
 switch(command){
 	case 'my-tweets':
-		myTweets();
-		break;
-	// case 'spotify-this-song':
-	// 	//If user has not specified a song , use default
-	// 	// if(userInput === undefined){
-	// 	// 	userInput = defaultSong;
-	// 	// }
-	// 	// console.log('searching Spotify for: '+userInput)     
-	// 	// spotifyThis(userInput);
-	// 	spotifyThis()
-	// 	break;
+		myTweets()
+		break
+	case 'spotify-this-song':
+		if(userInput === undefined){
+			userInput = defaultSong
+		}
+		console.log('searching Spotify for: '+userInput)     
+		spotifyThis(userInput)
+		break
 	case'movie-this':
 		if (userInput === undefined) {
 			movieThis(defaultMovie)
@@ -70,20 +72,21 @@ function myTweets() {
 	})
 }
 
-// // function to look up songs in spotify
-// function spotifyThis(song){
-// 	// console.log('making sure spotifyThis() runs')
-// 	Spotify.search({ type: 'track', query: 'dancing in the moonlight' }, function(err, data) {
-// 	    if ( err ) {
-// 	        console.log('Error occurred: ' + err);
-// 	        return;
-// 	    }
-	 
-// 	    // Do something with 'data' 
-// 	    console.log(data)
-// 	});
-
-// }
+function spotifyThis(song){
+	spotify.search({ type: 'track', query: song }, function(err, data) {
+	  if (err) {
+	    return console.log('Error occurred: ' + err)
+	  }
+	  // console.log(data.tracks.items[0])
+	  for (var i = 0; i < data.tracks.items.length; i++) {
+	  console.log('Artist(s): '+data.tracks.items[i].artists[0].name)
+	  console.log('Song Name: '+data.tracks.items[i].name)
+	  console.log('Preview Link: '+data.tracks.items[i].preview_url)
+	  console.log('Album: '+data.tracks.items[i].album.name)
+	  console.log('==============================')
+	}
+	})
+}
 
 //function to look up movies in omdb
 function movieThis(movie) {

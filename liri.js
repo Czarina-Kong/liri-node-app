@@ -26,15 +26,19 @@ var spotify = new Spotify(keys.spotify)
 
 
 
+//Let's create some switch case statements
+function runCommand(argument) {
+	// body...
 switch(command){
 	case 'my-tweets':
+		console.log('retrieving tweets from @ucb_zeelee28...\n===============================')
 		myTweets()
 		break
 	case 'spotify-this-song':
 		if(userInput === undefined){
 			userInput = defaultSong
 		}
-		console.log('searching Spotify for: '+userInput)     
+		console.log('searching Spotify for: '+userInput+'...\n===============================')     
 		spotifyThis(userInput)
 		break
 	case'movie-this':
@@ -43,14 +47,20 @@ switch(command){
 			console.log("If you haven't watched "+'"Mr.Nobody," '+"then you should: http://www.imdb.com/title/tt0485947/\nIt's on Netflix!")
 			break
 		}
+		console.log('searching omdb for: '+userInput+'...\n===============================')
 		movieThis(userInput)
 		break
-	// case 'do-what-it-says':
-	// 	doWhatItSays();
-	// 	break;
+	case 'do-what-it-says':
+		doIt()
+		break
 	default: 
 		console.log("Please type any of the following commands: my-tweets spotify-this-song movie-this do-what-it-says.")
 }
+}
+runCommand()
+
+
+
 
 // Let's make some functions
 
@@ -64,9 +74,9 @@ function myTweets() {
 	  if (!error) {
 	    // console.log(tweets);
 	    for (var i = 0; i < tweets.length; i++) {
-	    	console.log('@'+tweets[i].user.screen_name+'\ntweeted: '+tweets[i].text)
-	    	console.log('at '+tweets[i].created_at)
-	    	console.log('===============================')
+	    	console.log('@'+tweets[i].user.screen_name+' tweeted: \n\n'+tweets[i].text)
+	    	console.log('\nat '+tweets[i].created_at)
+	    	console.log('------------------------------')
 	    }
 	  }else{console.log(error)}
 	})
@@ -83,7 +93,7 @@ function spotifyThis(song){
 	  console.log('Song Name: '+data.tracks.items[i].name)
 	  console.log('Preview Link: '+data.tracks.items[i].preview_url)
 	  console.log('Album: '+data.tracks.items[i].album.name)
-	  console.log('==============================')
+	  console.log('------------------------------')
 	}
 	})
 }
@@ -108,3 +118,20 @@ function movieThis(movie) {
 	})
 }
 
+//function to run spotifyThis() on text in random.txt
+function doIt() {
+  	// We will read the existing random.txt file
+  	fs.readFile("random.txt", "utf8", function(err, data) {
+	    if (err) {
+	      return console.log(err);
+	    }
+		// separate data into command and userInput
+		data = data.split(",");
+		// console.log(data)
+		command = data[0]
+		userInput = data[1]
+		// console.log('command: '+command, 'userInput: ' +userInput)
+		console.log('you want me to run '+command+' on '+userInput)
+		runCommand(command)
+	})
+}

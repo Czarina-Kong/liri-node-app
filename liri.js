@@ -3,61 +3,62 @@ require("dotenv").config()
 
 // Let's make some variables
 
-// export modules
+//export modules
 var fs = require('fs')
 var request = require('request')
 var Twitter = require('twitter')
-// var spotify = require('spotify')
-// var SpotifyWebApi = require('spotify-web-api-node')
+//---i tried these other packages and couldn't get them to work---//
+	// var spotify = require('spotify')
+	// var SpotifyWebApi = require('spotify-web-api-node')
 var Spotify = require('node-spotify-api')
 var keys = require("./keys.js")
 // variables to store commands and user inputs
 var command = process.argv[2]
 var userInput = process.argv[3]
-// default searches when process.argv[3] is empty
+// default searches when user input is empty
 var defaultSong = "The Sign"
 var defaultMovie = "Mr. Nobody"
 // variables to access keys
 var client = new Twitter(keys.twitter)
-// var spotify = new spotify(keys.spotify)
-// var spotifyApi = new SpotifyWebApi(keys.spotify)
+//---part of code for previous packages that i couldn't get to work---//
+	// var spotify = new spotify(keys.spotify)
+	// var spotifyApi = new SpotifyWebApi(keys.spotify)
 var spotify = new Spotify(keys.spotify)
 
 
 
 
 //Let's create some switch case statements
+//---wrapped switch case statements in runCommand() so do-what-it-says command does what random.txt says---//
 function runCommand(argument) {
-	// body...
-switch(command){
-	case 'my-tweets':
-		console.log('retrieving tweets from @ucb_zeelee28...\n===============================')
-		myTweets()
-		break
-	case 'spotify-this-song':
-		if(userInput === undefined){
-			userInput = defaultSong
-		}
-		console.log('searching Spotify for: '+userInput+'...\n===============================')     
-		spotifyThis(userInput)
-		break
-	case'movie-this':
-		if (userInput === undefined) {
-			movieThis(defaultMovie)
-			console.log("If you haven't watched "+'"Mr.Nobody," '+"then you should: http://www.imdb.com/title/tt0485947/\nIt's on Netflix!")
+	switch(command){
+		case 'my-tweets':
+			console.log('retrieving tweets from @ucb_zeelee28...\n===============================')
+			myTweets()
 			break
-		}
-		console.log('searching omdb for: '+userInput+'...\n===============================')
-		movieThis(userInput)
-		break
-	case 'do-what-it-says':
-		doIt()
-		break
-	default: 
-		console.log("Please type any of the following commands: my-tweets spotify-this-song movie-this do-what-it-says.")
+		case 'spotify-this-song':
+			if(userInput === undefined){
+				userInput = defaultSong
+			}
+			console.log('searching Spotify for: '+userInput+'...\n===============================')     
+			spotifyThis(userInput)
+			break
+		case'movie-this':
+			if (userInput === undefined) {
+				movieThis(defaultMovie)
+				console.log("If you haven't watched "+'"Mr.Nobody," '+"then you should: http://www.imdb.com/title/tt0485947/\nIt's on Netflix!")
+				break
+			}
+			console.log('searching omdb for: '+userInput+'...\n===============================')
+			movieThis(userInput)
+			break
+		case 'do-what-it-says':
+			doIt()
+			break
+		default: 
+			console.log("Please type any of the following commands: my-tweets spotify-this-song movie-this do-what-it-says.")
+	}
 }
-}
-runCommand()
 
 
 
@@ -135,3 +136,9 @@ function doIt() {
 		runCommand(command)
 	})
 }
+
+
+
+
+// run liri bot
+runCommand()
